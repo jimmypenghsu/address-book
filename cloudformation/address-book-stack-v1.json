@@ -1,0 +1,704 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "5c5992e8-469f-4125-8f1d-d8bdaacb141c": {
+                "size": {
+                    "width": 140,
+                    "height": 140
+                },
+                "position": {
+                    "x": 320,
+                    "y": 120
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "ad23e226-d54e-46b3-8f29-b2e21b9c807e": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 530,
+                    "y": 40
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "af6e8a32-c1d2-4355-8d4f-6a3c51c07c41": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 540,
+                    "y": 350
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "b4ad872e-f605-4ab8-8127-5c45e6ac9c8a": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 540,
+                    "y": 260
+                },
+                "z": 0,
+                "embeds": [],
+                "isassociatedwith": [
+                    "352fe402-71b4-475c-ba8d-5ec7003c65b9",
+                    "f1a55344-fa6a-44f7-ab9e-a4deb25835bf"
+                ]
+            },
+            "f1a55344-fa6a-44f7-ab9e-a4deb25835bf": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 540,
+                    "y": 170
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "b166c1a6-72f6-4a75-9e04-0a543c5c2b66": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 160,
+                    "y": 120
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "489fc5c4-0684-42ce-b2a6-1b9a75df6867": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 160,
+                    "y": 220
+                },
+                "z": 0,
+                "embeds": [],
+                "isassociatedwith": [
+                    "352fe402-71b4-475c-ba8d-5ec7003c65b9",
+                    "b166c1a6-72f6-4a75-9e04-0a543c5c2b66"
+                ]
+            },
+            "870cf48c-069f-44f7-9b76-70d72290fe97": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 270,
+                    "y": 340
+                },
+                "z": 0,
+                "embeds": [],
+                "dependson": [
+                    "5c5992e8-469f-4125-8f1d-d8bdaacb141c"
+                ]
+            },
+            "eb6de600-2ec5-4bde-85e2-e85b64604960": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 480,
+                    "y": 460
+                },
+                "z": 0,
+                "embeds": []
+            },
+            "14ca77ce-a87d-4a11-9185-ce385df0a05f": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 380,
+                    "y": 340
+                },
+                "z": 0,
+                "embeds": [],
+                "iscontainedinside": [
+                    "5c5992e8-469f-4125-8f1d-d8bdaacb141c"
+                ],
+                "dependson": [
+                    "870cf48c-069f-44f7-9b76-70d72290fe97"
+                ]
+            },
+            "6fc60417-9527-4d84-bc70-c40dcc1a7324": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 380,
+                    "y": 460
+                },
+                "z": 0,
+                "embeds": [],
+                "isassociatedwith": [
+                    "eb6de600-2ec5-4bde-85e2-e85b64604960"
+                ],
+                "dependson": [
+                    "14ca77ce-a87d-4a11-9185-ce385df0a05f"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "apiGateway": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+                "ApiKeySourceType": "HEADER",
+                "Body": {
+                    "openapi": "3.0.1",
+                    "info": {
+                        "title": "address-book",
+                        "version": "2018-10-06T05:22:17Z"
+                    },
+                    "x-amazon-apigateway-request-validator": "all",
+                    "x-amazon-apigateway-request-validators": {
+                        "all": {
+                            "validateRequestBody": true,
+                            "validateRequestParameters": true
+                        }
+                    },
+                    "paths": {
+                        "/{username}": {
+                            "get": {
+                                "parameters": [
+                                    {
+                                        "name": "postcode",
+                                        "in": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "name": "username",
+                                        "in": "path",
+                                        "required": true,
+                                        "type": "string"
+                                    },
+                                    {
+                                        "name": "suburb",
+                                        "in": "query",
+                                        "required": false,
+                                        "type": "string"
+                                    }
+                                ],
+                                "responses": {
+                                    "200": {
+                                        "description": "200 response",
+										"headers": {
+                                            "Access-Control-Allow-Origin": {
+                                                "schema": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "content": {
+                                            "application/json": {
+                                                "schema": {
+                                                    "$ref": "#/components/schemas/GetResponse"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "security": [
+                                    {
+                                        "api_key": []
+                                    }
+                                ],
+                                "x-amazon-apigateway-integration": {
+                                    "uri": {
+                                        "Fn::Sub": [
+                                            "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations",
+                                            {
+                                                "lambdaArn": {
+                                                    "Fn::GetAtt": [
+                                                        "getAddressEntries",
+                                                        "Arn"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "responses": {
+                                        "default": {
+                                            "statusCode": "200",
+                                            "responseParameters": {
+                                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                                            }
+                                        }
+                                    },
+                                    "passthroughBehavior": "when_no_match",
+                                    "httpMethod": "POST",
+                                    "contentHandling": "CONVERT_TO_TEXT",
+                                    "type": "aws_proxy"
+                                }
+                            },
+                            "post": {
+                                "parameters": [
+                                    {
+                                        "name": "username",
+                                        "in": "path",
+                                        "required": true,
+                                        "schema": {
+                                            "type": "string"
+                                        }
+                                    }
+                                ],
+                                "requestBody": {
+                                    "content": {
+                                        "application/json": {
+                                            "schema": {
+                                                "$ref": "#/components/schemas/PostRequest"
+                                            }
+                                        }
+                                    },
+                                    "required": true
+                                },
+                                "responses": {
+                                    "200": {
+                                        "description": "200 response",
+										"headers": {
+                                            "Access-Control-Allow-Origin": {
+                                                "schema": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "content": {
+                                            "application/json": {
+                                                "schema": {
+                                                    "$ref": "#/components/schemas/Empty"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "security": [
+                                    {
+                                        "api_key": []
+                                    }
+                                ],
+                                "x-amazon-apigateway-integration": {
+                                    "uri": {
+                                        "Fn::Sub": [
+                                            "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations",
+                                            {
+                                                "lambdaArn": {
+                                                    "Fn::GetAtt": [
+                                                        "postAddressEntry",
+                                                        "Arn"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "responses": {
+                                        "default": {
+                                            "statusCode": "200",
+                                            "responseParameters": {
+                                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                                            }
+                                        }
+                                    },
+                                    "passthroughBehavior": "when_no_match",
+                                    "httpMethod": "POST",
+                                    "contentHandling": "CONVERT_TO_TEXT",
+                                    "type": "aws_proxy"
+                                }
+                            },
+                            "options": {
+                                "responses": {
+                                    "200": {
+                                        "description": "200 response",
+                                        "headers": {
+                                            "Access-Control-Allow-Origin": {
+                                                "schema": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "Access-Control-Allow-Methods": {
+                                                "schema": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "Access-Control-Allow-Headers": {
+                                                "schema": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "content": {
+                                            "application/json": {
+                                                "schema": {
+                                                    "$ref": "#/components/schemas/Empty"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "x-amazon-apigateway-integration": {
+                                    "responses": {
+                                        "default": {
+                                            "statusCode": "200",
+                                            "responseParameters": {
+                                                "method.response.header.Access-Control-Allow-Methods": "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'",
+                                                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'",
+                                                "method.response.header.Access-Control-Allow-Origin": "'*'"
+                                            }
+                                        }
+                                    },
+                                    "requestTemplates": {
+                                        "application/json": "{\"statusCode\": 200}"
+                                    },
+                                    "passthroughBehavior": "when_no_match",
+                                    "type": "mock"
+                                }
+                            }
+                        }
+                    },
+                    "components": {
+                        "schemas": {
+                            "Empty": {
+                                "title": "Empty Schema",
+                                "type": "object"
+                            },
+                            "PostRequest": {
+                                "title": "POST request object",
+                                "required": [
+                                    "addressEntry"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "addressEntry": {
+                                        "$ref": "#/components/schemas/AddressEntry"
+                                    }
+                                }
+                            },
+                            "AddressEntry": {
+                                "title": "An address entry",
+                                "required": [
+                                    "addressLine1",
+                                    "addressLine2",
+                                    "postcode",
+                                    "state",
+                                    "suburb"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "postcode": {
+                                        "type": "string"
+                                    },
+                                    "suburb": {
+                                        "type": "string"
+                                    },
+                                    "addressLine1": {
+                                        "type": "string"
+                                    },
+                                    "addressLine2": {
+                                        "type": "string"
+                                    },
+                                    "state": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "GetResponse": {
+                                "title": "GET response object",
+                                "type": "object",
+                                "properties": {
+                                    "addressEntries": {
+                                        "$ref": "#/components/schemas/AddressEntry"
+                                    }
+                                }
+                            }
+                        },
+                        "securitySchemes": {
+                            "api_key": {
+                                "type": "apiKey",
+                                "name": "x-api-key",
+                                "in": "header"
+                            }
+                        }
+                    }
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5c5992e8-469f-4125-8f1d-d8bdaacb141c"
+                }
+            }
+        },
+        "lambdaIAMRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "lambda.amazonaws.com"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "dynamodb:BatchGetItem",
+                                        "dynamodb:GetItem",
+                                        "dynamodb:Query",
+                                        "dynamodb:Scan",
+                                        "dynamodb:BatchWriteItem",
+                                        "dynamodb:PutItem",
+                                        "dynamodb:UpdateItem"
+                                    ],
+                                    "Resource": [
+                                        {
+                                            "Fn::Sub": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/address-book"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Effect": "Allow",
+                                    "Action": [
+                                        "logs:*"
+                                    ],
+                                    "Resource": "arn:aws:logs:*:*:*"
+                                }
+                            ]
+                        },
+                        "PolicyName": "lambda"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "ad23e226-d54e-46b3-8f29-b2e21b9c807e"
+                }
+            }
+        },
+        "addressBookTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+                "TableName": "address-book",
+                "AttributeDefinitions": [
+                    {
+                        "AttributeName": "username",
+                        "AttributeType": "S"
+                    }
+                ],
+                "KeySchema": [
+                    {
+                        "AttributeName": "username",
+                        "KeyType": "HASH"
+                    }
+                ],
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": "5",
+                    "WriteCapacityUnits": "5"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "af6e8a32-c1d2-4355-8d4f-6a3c51c07c41"
+                }
+            }
+        },
+        "getAddressEntries": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "FunctionName": "getAddressEntries",
+                "Handler": "index.handler",
+                "Runtime": "nodejs6.10",
+                "MemorySize": 128,
+                "Timeout": 3,
+                "Role": {
+                    "Fn::GetAtt": [
+                        "lambdaIAMRole",
+                        "Arn"
+                    ]
+                },
+                "Code": {
+                    "S3Bucket": "the-static-bucket",
+                    "S3Key": "lambda/getAddressEntries.zip"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f1a55344-fa6a-44f7-ab9e-a4deb25835bf"
+                }
+            }
+        },
+        "postAddressEntry": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "FunctionName": "postAddressEntry",
+                "Handler": "index.handler",
+                "Runtime": "nodejs6.10",
+                "MemorySize": 128,
+                "Timeout": 3,
+                "Role": {
+                    "Fn::GetAtt": [
+                        "lambdaIAMRole",
+                        "Arn"
+                    ]
+                },
+                "Code": {
+                    "S3Bucket": "the-static-bucket",
+                    "S3Key": "lambda/postAddressEntry.zip"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "b166c1a6-72f6-4a75-9e04-0a543c5c2b66"
+                }
+            }
+        },
+        "getAddressEntriesApiGatewayInvoke": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                    "Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apiGateway}/*"
+                },
+                "FunctionName": {
+                    "Ref": "getAddressEntries"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "b4ad872e-f605-4ab8-8127-5c45e6ac9c8a"
+                }
+            }
+        },
+        "postAddressEntryApiGatewayInvoke": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                    "Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${apiGateway}/*"
+                },
+                "FunctionName": {
+                    "Ref": "postAddressEntry"
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "489fc5c4-0684-42ce-b2a6-1b9a75df6867"
+                }
+            }
+        },
+        "deployApiDev": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "apiGateway"
+                },
+                "StageName": "dev"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "870cf48c-069f-44f7-9b76-70d72290fe97"
+                }
+            },
+            "DependsOn": [
+                "apiGateway"
+            ]
+        },
+        "apiKey": {
+            "Type": "AWS::ApiGateway::ApiKey",
+            "Properties": {
+                "Name": "mykey",
+                "GenerateDistinctId": true,
+                "StageKeys": [
+                    {
+                        "RestApiId": {
+                            "Ref": "apiGateway"
+                        },
+                        "StageName": "dev"
+                    }
+                ],
+                "Enabled": true
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "eb6de600-2ec5-4bde-85e2-e85b64604960"
+                }
+            }
+        },
+        "usagePlan": {
+            "Type": "AWS::ApiGateway::UsagePlan",
+            "Properties": {
+                "UsagePlanName": "dummyUsagePlan",
+                "ApiStages": [
+                    {
+                        "ApiId": {
+                            "Ref": "apiGateway"
+                        },
+                        "Stage": "dev"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "14ca77ce-a87d-4a11-9185-ce385df0a05f"
+                }
+            },
+            "DependsOn": [
+                "deployApiDev"
+            ]
+        },
+        "usagePlanKey": {
+            "Type": "AWS::ApiGateway::UsagePlanKey",
+            "Properties": {
+                "KeyId": {
+                    "Ref": "apiKey"
+                },
+                "UsagePlanId": {
+                    "Ref": "usagePlan"
+                },
+                "KeyType": "API_KEY"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6fc60417-9527-4d84-bc70-c40dcc1a7324"
+                }
+            },
+            "DependsOn": [
+                "usagePlan"
+            ]
+        }
+    }
+}

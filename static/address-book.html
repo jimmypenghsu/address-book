@@ -1,0 +1,237 @@
+<html>
+<head>
+    <!-- jQuery -->
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <h1>The address book</h1>
+    <p>Note: You will need to run this from a public S3 bucket as the auto-complete service checks for domain origin.
+        This is a utilities page and does not provide full input validations.</p>
+    <div id="alertTarget"></div>
+    <h3>Configuration</h3>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <form>
+                <div class="form-group">
+                    <label for="apiEndpointInput">API Endpoint</label>
+                    <input type="text" class="form-control" id="apiEndpointInput"
+                           placeholder="e.g. https://pb7yelzq48.execute-api.ap-southeast-2.amazonaws.com/dev"
+                           value="https://pb7yelzq48.execute-api.ap-southeast-2.amazonaws.com/dev">
+                </div>
+                <div class="form-group">
+                    <label for="apiKeyInput">API Key</label>
+                    <input type="text" class="form-control" id="apiKeyInput"
+                           placeholder="e.g. PAoRVQMYLK5vcImnftO8x80DMuWbubXvurWtT4qg"
+                           value="PAoRVQMYLK5vcImnftO8x80DMuWbubXvurWtT4qg">
+                </div>
+                <div class="form-group">
+                    <label for="usernameInput">Username</label>
+                    <input type="text" class="form-control" id="usernameInput" placeholder="e.g. coolguy100"
+                           value="myusername">
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <h3>Store address</h3>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <form>
+                <div class="form-group">
+                    <label for="addressSearchInput">Address search</label>
+                    <input type="text" class="form-control" id="addressSearchInput"
+                           placeholder="e.g. 15 Rosedale Cres, Ringwood East">
+                </div>
+                <input type="hidden" id="addressLine1">
+                <input type="hidden" id="addressLine2">
+                <input type="hidden" id="suburb">
+                <input type="hidden" id="postcode">
+                <input type="hidden" id="state">
+                <button id="storeAddressButton" class="btn btn-default">Store address</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <h3>Retrieve address</h3>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <form>
+                <div class="form-group">
+                    <label for="postcodeFilterInput">Postcode filter</label>
+                    <input type="text" class="form-control" id="postcodeFilterInput"
+                           placeholder="e.g. Ringwood East">
+                </div>
+                <div class="form-group">
+                    <label for="suburbFilterInput">Suburb filter</label>
+                    <input type="text" class="form-control" id="suburbFilterInput"
+                           placeholder="e.g. 3135">
+                </div>
+                <button id="retrieveAddressEntriesButton" class="btn btn-default">Retrieve address entries</button>
+            </form>
+            <div id="retrieveResultTarget"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+  let showAlert = message => {
+    $('#alertTarget').html(
+      `
+        <div class="alert alert-danger" role="alert">
+            <p>${message}</p>
+        </div>
+        `
+    );
+    $('#retrieveAddressEntriesButton').prop('disabled', false);
+    $('#storeAddressButton').prop('disabled', false);
+  };
+
+  let showSuccess = message => {
+    $('#alertTarget').html(
+      `
+        <div class="alert alert-success" role="alert">
+            <p>${message}</p>
+        </div>
+        `
+    );
+  };
+
+  let clearNotification = () => {
+    $('#alertTarget').empty();
+  };
+
+  let checkConfigValid = () => {
+    if (!$('#apiEndpointInput').val() || !$('#apiKeyInput').val() || !$('#usernameInput').val()) {
+      showAlert('API Endpoint, API Key and Username must be provided');
+      return false;
+    }
+    clearNotification();
+    return true;
+  };
+
+  $('#retrieveAddressEntriesButton').on('click', (e) => {
+    e.preventDefault();
+    $('#retrieveAddressEntriesButton').prop('disabled', true);
+    if (checkConfigValid()) {
+      const promise = $.ajax({
+        url: `${$('#apiEndpointInput').val()}/${encodeURIComponent($('#usernameInput').val())}`,
+        headers: {'x-api-key': $('#apiKeyInput').val()},
+        data: {
+          postcode: $('#postcodeFilterInput').val(),
+          suburb: $('#suburbFilterInput').val()
+        }
+      });
+
+      promise.done((data) => {
+        showSuccess('Address retrieved successfully');
+        let tableHtml = `<ul class="list-group">`;
+        if (!data.entries.length) tableHtml += `<li class="list-group-item">No entries found</li>`;
+        data.entries.forEach(function (address) {
+          tableHtml +=
+            `<li class="list-group-item">
+                addressLine1: ${address.addressLine1 === 'nil' ? '' : address.addressLine1}
+                <br>
+                addressLine2: ${address.addressLine2 === 'nil' ? '' : address.addressLine2}
+                <br>
+                suburb: ${address.suburb}, postcode: ${address.postcode}
+                <br>
+                state: ${address.state}
+            </li>`
+        });
+        tableHtml += `</ul>`;
+        $('#retrieveResultTarget').html(tableHtml);
+      }).fail(() => {
+        showAlert('Something went wrong, perhaps check the configuration section?')
+      }).always(() => {
+        $('#retrieveAddressEntriesButton').prop('disabled', false);
+      });
+    }
+  });
+
+  $('#storeAddressButton').on('click', (e) => {
+    e.preventDefault();
+    $('#storeAddressButton').prop('disabled', true);
+
+    const formData = {
+      addressEntry: {
+        state: $('#state').val(),
+        suburb: $('#suburb').val(),
+        postcode: $('#postcode').val(),
+        addressLine1: $('#addressLine1').val(),
+        addressLine2: $('#addressLine2').val()
+      }
+    };
+    if (checkConfigValid()) {
+
+      if (!$('#addressSearchInput').val()) {
+        showAlert('Address must be specified');
+        return
+      }
+
+      const promise = $.ajax({
+        method: 'POST',
+        url: `${$('#apiEndpointInput').val()}/${encodeURIComponent($('#usernameInput').val())}`,
+        headers: {'x-api-key': $('#apiKeyInput').val()},
+        data: JSON.stringify(formData),
+        contentType: 'application/json; charset=utf-8'
+      });
+
+      promise.done(() => {
+        $('#addressSearchInput').val('');
+        showSuccess('Address entry saved successfully');
+      }).fail(() => {
+        showAlert('Something went wrong, perhaps check the configuration section?')
+      }).always(() => {
+        $('#storeAddressButton').prop('disabled', false);
+      });
+    }
+  });
+
+  <!-- auto-complete inclusion, mostly auto generated -->
+  (function () {
+    var widget, initAF = function () {
+      widget = new AddressFinder.Widget(
+        document.getElementById('addressSearchInput'),
+        'RXK943FBHCGUPMJADTLE',
+        'AU', {
+          "address_params": {
+            "post_box": "0"
+          }
+        }
+      );
+      widget.on('result:select', function (fullAddress, metaData) {
+        document.getElementById('addressSearchInput').value = metaData.full_address;
+        $('#addressLine1').val(metaData.address_line_1);
+        $('#addressLine2').val(metaData.address_line_2);
+        $('#suburb').val(metaData.locality_name);
+        $('#postcode').val(metaData.postcode);
+        $('#state').val(metaData.state_territory);
+      });
+    };
+
+    function downloadAF(f) {
+      var script = document.createElement('script');
+      script.src = 'https://api.addressfinder.io/assets/v3/widget.js';
+      script.async = true;
+      script.onload = f;
+      document.body.appendChild(script);
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      downloadAF(initAF);
+    });
+
+  })();
+</script>
+</html>

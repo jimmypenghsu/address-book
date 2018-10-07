@@ -20,7 +20,7 @@ The CloudFormation template will create most of the resources for you, make sure
 * Appropriate roles and permissions
 * API dev stage deployment and configuration of Usage Plan with API Key
 
-You can think of the base endpoint as serving _address entry bundles_ with the `username` being the ID, so the two endpoint looks like:
+You can think of the base endpoint as serving _address entry bundles_ with the `username` being the ID, so the two methods looks like:
 
 GET: `https://pb7yelzq48.execute-api.ap-southeast-2.amazonaws.com/dev/{username}` <br>
 Query strings: postcode, suburb

@@ -10,7 +10,7 @@ Please note that the main focus of the solution is on integration, so you may fi
 * API is secured by generated API Key.
  
 ### Overview
-The CloudFormation template will create most of the resources for you, make sure your account have the appropriate access and region is set to ap-southeast-2. On the high level these are the resources that would be created:
+The CloudFormation template will create most of the resources for you, make sure your account have the appropriate access and region is set to `ap-southeast-2`. On the high level these are the resources that would be created:
 
 ![Image of CF resources](https://s3-ap-southeast-2.amazonaws.com/the-static-bucket/cf-visual.png)
 
@@ -19,6 +19,26 @@ The CloudFormation template will create most of the resources for you, make sure
 * Two Lambda functions, one for retrieval and another for storing address entries
 * Appropriate roles and permissions
 * API dev stage deployment and configuration of Usage Plan with API Key
+
+You can think of the base endpoint as serving _address entry bundles_ with the `username` being the ID, so the two endpoint looks like:
+
+GET: `https://pb7yelzq48.execute-api.ap-southeast-2.amazonaws.com/dev/{username}` <br>
+Query strings: postcode, suburb
+
+POST: `https://pb7yelzq48.execute-api.ap-southeast-2.amazonaws.com/dev/{username}` <br>
+Data schema, example:
+```javascript
+{
+    "addressEntry": {
+      "state": "VIC",
+      "suburb": "RINGWOOD EAST",
+      "postcode": "3134",
+      "addressLine1": "Unit 1519",
+      "addressLine2": "200 Rosedale Cres"
+    }
+}
+````
+You will be able to see these in action on the demo page with the development console.
 
 ### Deployment
 1. Navigate to the CloudFormation console and create a new stack named `address-book-stack` with the template specified in `address-book-stack-v1.json`. Use all default param values. Note: the code for the Lambda functions are stored on my public S3 bucket which will be downloaded when you create the new stack, but there is also a copy in source control.

@@ -1,5 +1,6 @@
 <html>
 <head>
+    <title>The address book</title>
     <!-- jQuery -->
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -12,11 +13,13 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
 </head>
+<link rel="icon" type="image/png" href="/favicon.png">
 <body>
 <div class="container">
     <h1>The address book</h1>
-    <p>Note: You will need to run this from a public S3 bucket as the auto-complete service checks for domain origin.
-        This is a utilities page and does not provide full input validations.</p>
+    <p>Note: You will need to serve this file from a public S3 bucket as the auto-complete service checks for domain origin.
+        This is a utilities / demo page and does not provide full input validations.</p>
+    <p>Store and retrieve will be based on the configuration in context. You can also change the endpoint and api key to your own instance.</p>
     <div id="alertTarget"></div>
     <h3>Configuration</h3>
     <div class="row">
@@ -67,12 +70,12 @@
         <div class="col-md-6 col-lg-6">
             <form>
                 <div class="form-group">
-                    <label for="postcodeFilterInput">Postcode filter</label>
+                    <label for="postcodeFilterInput">Postcode filter (optional)</label>
                     <input type="text" class="form-control" id="postcodeFilterInput"
                            placeholder="e.g. Ringwood East">
                 </div>
                 <div class="form-group">
-                    <label for="suburbFilterInput">Suburb filter</label>
+                    <label for="suburbFilterInput">Suburb filter (optional)</label>
                     <input type="text" class="form-control" id="suburbFilterInput"
                            placeholder="e.g. 3135">
                 </div>
@@ -120,6 +123,10 @@
     return true;
   };
 
+  let nilReplace = text => {
+    return text === 'nil' ? '' : text
+  };
+
   $('#retrieveAddressEntriesButton').on('click', (e) => {
     e.preventDefault();
     $('#retrieveAddressEntriesButton').prop('disabled', true);
@@ -128,8 +135,8 @@
         url: `${$('#apiEndpointInput').val()}/${encodeURIComponent($('#usernameInput').val())}`,
         headers: {'x-api-key': $('#apiKeyInput').val()},
         data: {
-          postcode: $('#postcodeFilterInput').val(),
-          suburb: $('#suburbFilterInput').val()
+          postcode: $('#postcodeFilterInput').val().trim(),
+          suburb: $('#suburbFilterInput').val().trim()
         }
       });
 
@@ -140,13 +147,15 @@
         data.entries.forEach(function (address) {
           tableHtml +=
             `<li class="list-group-item">
-                addressLine1: ${address.addressLine1 === 'nil' ? '' : address.addressLine1}
+                AddressLine1: ${nilReplace(address.addressLine1)}
                 <br>
-                addressLine2: ${address.addressLine2 === 'nil' ? '' : address.addressLine2}
+                AddressLine2: ${nilReplace(address.addressLine2)}
                 <br>
-                suburb: ${address.suburb}, postcode: ${address.postcode}
+                Suburb: ${nilReplace(address.suburb)}
                 <br>
-                state: ${address.state}
+                Postcode: ${nilReplace(address.postcode)}
+                <br>
+                State: ${nilReplace(address.state)}
             </li>`
         });
         tableHtml += `</ul>`;

@@ -12,7 +12,7 @@ Please note that the main focus of the solution is on integration, so you may fi
 ### Overview
 The CloudFormation template will create most of the resources for you, make sure your account have the appropriate access and region is set to `ap-southeast-2`. On the high level these are the resources that would be created:
 
-![Image of CF resources](https://s3-ap-southeast-2.amazonaws.com/the-static-bucket/cf-visual.png)
+![Image of CF resources](https://s3-ap-southeast-2.amazonaws.com/the-static-bucket/cf-visual.png?v=1)
 
 * REST API (OpenAPI spec embedded)
 * DynamoDB table

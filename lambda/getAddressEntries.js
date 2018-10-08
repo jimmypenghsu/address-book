@@ -49,6 +49,7 @@ exports.handler = async (event, context, callback) => {
       entries: addressEntries
     });
 
+    console.log(`request success with params: ${JSON.stringify(event)}`);
     callback(null, response);
 
   } catch (e) {
@@ -58,6 +59,7 @@ exports.handler = async (event, context, callback) => {
       result: 'Oops.. something went wrong',
     });
 
+    console.log(`request error with params: ${JSON.stringify(event)}`);
     callback(null, response);
 
   }

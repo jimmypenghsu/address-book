@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
-  "Description": "Address Book via SAM",
+  "Description": "Address Book via SAM, not a working stack, some resource link and api keys missing.",
   "Resources": {
     "GetFunction": {
       "Type": "AWS::Serverless::Function",

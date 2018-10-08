@@ -1,64 +1,70 @@
 const AWS = require('aws-sdk');
-AWS.config.update({ region: 'ap-southeast-2' });
+AWS.config.update({region: 'ap-southeast-2'});
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
-exports.handler = (event, context, callback) => {
+const filterType = {
+  SUBURB: 'suburb',
+  POSTCODE: 'postcode'
+};
+
+exports.handler = async (event, context, callback) => {
 
   const dbQueryParams = {
     TableName: 'address-book',
-    Key: { username: event.pathParameters.username }
+    Key: {username: event.pathParameters.username}
   };
 
-  documentClient.get(dbQueryParams, function(err, data) {
-
-    if (err) {
-
-      const response = {
-        "statusCode": 502,
-        "headers" : {
-          "Access-Control-Allow-Origin": "*"
-        },
-        "body": JSON.stringify({ result: 'Oops.. something went wrong' })
-      };
-
-      console.log(`request error with params: ${JSON.stringify(event)}`);
-      callback(null, response);
+  const response = {
+    headers: {
+      "Access-Control-Allow-Origin": "*"
     }
-    else {
+  };
 
-      let addressEntries = [];
+  try {
 
-      if (data.Item && data.Item.addressEntries) {
+    const data = await documentClient.get(dbQueryParams).promise();
 
-        addressEntries = data.Item.addressEntries;
+    let addressEntries = [];
 
-        // do some filtering if query params exists from request
-        if (event.queryStringParameters) {
-          if (event.queryStringParameters.suburb) {
-            addressEntries = addressEntries.filter(entry => entry.suburb.toUpperCase() === event.queryStringParameters.suburb.toUpperCase());
-          }
-          if (event.queryStringParameters.postcode) {
-            addressEntries = addressEntries.filter(entry => entry.postcode === event.queryStringParameters.postcode);
-          }
+    if (data.Item && data.Item.addressEntries) {
+
+      addressEntries = data.Item.addressEntries;
+
+      // do some filtering if query params exists from request
+      const httpQueryParams = event.queryStringParameters;
+      if (httpQueryParams) {
+        if (httpQueryParams.suburb) {
+          addressEntries = filter(addressEntries, filterType.SUBURB, httpQueryParams.suburb);
         }
-
+        if (httpQueryParams.postcode) {
+          addressEntries = filter(addressEntries, filterType.POSTCODE, httpQueryParams.postcode);
+        }
       }
 
-      const response = {
-        "statusCode": 200,
-        "headers" : {
-          "Access-Control-Allow-Origin": "*"
-        },
-        "body": JSON.stringify({
-          result: 'Address query successful',
-          entries: addressEntries
-        })
-      };
-
-      console.log(`request success with path params: ${JSON.stringify(event)}`);
-      callback(null, response);
     }
 
-  });
+    response.statusCode = 200;
+    response.body = JSON.stringify({
+      result: 'Address query successful',
+      entries: addressEntries
+    });
 
+    callback(null, response);
+
+  } catch (e) {
+
+    response.statusCode = 502;
+    response.body = JSON.stringify({
+      result: 'Oops.. something went wrong',
+    });
+
+    callback(null, response);
+
+  }
+
+};
+
+const filter = (addressEntries, field, value) => {
+  if (!value) return addressEntries;
+  return addressEntries.filter(entry => entry[field].toUpperCase() === value.toUpperCase());
 };

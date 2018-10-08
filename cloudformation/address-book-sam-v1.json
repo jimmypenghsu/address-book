@@ -1,0 +1,82 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "Address Book via SAM",
+  "Resources": {
+    "GetFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Runtime": "nodejs8.10",
+        "CodeUri": {
+          "Bucket": "the-static-bucket",
+          "Key": "lambda/getAddressEntries.zip"
+        },
+        "Policies": "AmazonDynamoDBReadOnlyAccess",
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{username}",
+              "Method": "get"
+            }
+          }
+        }
+      }
+    },
+    "PostFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Runtime": "nodejs6.10",
+        "CodeUri": {
+          "Bucket": "the-static-bucket",
+          "Key": "lambda/postAddressEntry.zip"
+        },
+        "Policies": "AmazonDynamoDBFullAccess",
+        "Events": {
+          "PutResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/{username}",
+              "Method": "post"
+            }
+          }
+        }
+      }
+    },
+    "Table": {
+      "Type": "AWS::Serverless::SimpleTable",
+      "Properties": {
+        "TableName": "address-book1",
+        "PrimaryKey": {
+          "Name": "username",
+          "Type": "String"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      }
+    },
+    "RestAPI": {
+      "Type": "AWS::Serverless::Api",
+      "Properties": {
+        "Name": "address-book1",
+        "StageName": "dev",
+        "DefinitionUri": {
+          "Bucket": "the-static-bucket",
+          "Key": "api/address-book-swagger-dev.json"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint for dev environment",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
+      }
+    }
+  }
+}

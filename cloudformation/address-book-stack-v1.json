@@ -119,7 +119,10 @@
                     "y": 460
                 },
                 "z": 0,
-                "embeds": []
+                "embeds": [],
+                "dependson": [
+                    "870cf48c-069f-44f7-9b76-70d72290fe97"
+                ]
             },
             "14ca77ce-a87d-4a11-9185-ce385df0a05f": {
                 "size": {
@@ -156,6 +159,15 @@
                 "dependson": [
                     "14ca77ce-a87d-4a11-9185-ce385df0a05f"
                 ]
+            },
+            "65f8a5fe-a915-43c5-be12-5ac7ad224339": {
+                "source": {
+                    "id": "eb6de600-2ec5-4bde-85e2-e85b64604960"
+                },
+                "target": {
+                    "id": "870cf48c-069f-44f7-9b76-70d72290fe97"
+                },
+                "z": 11
             }
         }
     },
@@ -203,7 +215,7 @@
                                 "responses": {
                                     "200": {
                                         "description": "200 response",
-										"headers": {
+                                        "headers": {
                                             "Access-Control-Allow-Origin": {
                                                 "schema": {
                                                     "type": "string"
@@ -276,7 +288,7 @@
                                 "responses": {
                                     "200": {
                                         "description": "200 response",
-										"headers": {
+                                        "headers": {
                                             "Access-Control-Allow-Origin": {
                                                 "schema": {
                                                     "type": "string"
@@ -656,7 +668,10 @@
                 "AWS::CloudFormation::Designer": {
                     "id": "eb6de600-2ec5-4bde-85e2-e85b64604960"
                 }
-            }
+            },
+            "DependsOn": [
+                "deployApiDev"
+            ]
         },
         "usagePlan": {
             "Type": "AWS::ApiGateway::UsagePlan",

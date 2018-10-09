@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: 'ap-southeast-2'});
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
-const filterType = {
+const FILTER_TYPE = {
   SUBURB: 'suburb',
   POSTCODE: 'postcode'
 };
@@ -34,10 +34,10 @@ exports.handler = async (event, context, callback) => {
       const httpQueryParams = event.queryStringParameters;
       if (httpQueryParams) {
         if (httpQueryParams.suburb) {
-          addressEntries = filter(addressEntries, filterType.SUBURB, httpQueryParams.suburb);
+          addressEntries = filter(addressEntries, FILTER_TYPE.SUBURB, httpQueryParams.suburb);
         }
         if (httpQueryParams.postcode) {
-          addressEntries = filter(addressEntries, filterType.POSTCODE, httpQueryParams.postcode);
+          addressEntries = filter(addressEntries, FILTER_TYPE.POSTCODE, httpQueryParams.postcode);
         }
       }
 
